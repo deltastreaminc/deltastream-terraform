@@ -1,7 +1,15 @@
+# -----------------------------------------------
+# Output Resources for vpc private endpoint service
+# ------------------------------------------------
 
-# Return the aws_vpc_endpoint_service resource for the MSK endpoint service including the service name and ID
-output "msk_endpoint_service" {
-    value = aws_vpc_endpoint_service.msk_aws_vpc_endpoint_service
+# Return the aws_vpc_endpoint_service: service_name for the MSK endpoint service
+output "msk_endpoint_service_name" {
+    value = try(aws_vpc_endpoint_service.msk-aws-vpc-endpoint-service[0].service_name, "")
+}
+
+# Return the aws_vpc_endpoint_service: service id for the MSK endpoint service
+output "msk_endpoint_service_id" {
+    value = try(aws_vpc_endpoint_service.msk-aws-vpc-endpoint-service[0].id, "")
 }
 
 output "table" {

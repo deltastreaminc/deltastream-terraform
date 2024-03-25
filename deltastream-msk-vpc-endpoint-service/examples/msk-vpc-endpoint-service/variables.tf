@@ -2,12 +2,6 @@
 # Variables for vpc private endpoint service
 # ------------------------------------------------
 
-variable "create" {
-  description = "Controls if VPC Endpoint Service related resources should be created (affects nearly all resources)"
-  type        = bool
-  default     = true
-}
-
 variable "name_prefix" {
   type = string
   description = "Prefix to apply to the resources."

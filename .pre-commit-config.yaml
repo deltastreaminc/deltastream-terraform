@@ -1,0 +1,42 @@
+# Reference: https://github.com/antonbabenko/pre-commit-terraform
+# Note: add it to bashrc or bash_profile
+#  PRE_COMMIT_DIR=~/.git-template
+#  git config --global init.templateDir ${PRE_COMMIT_DIR}
+#  pre-commit init-templatedir -t pre-commit ${PRE_COMMIT_DIR}
+
+repos:
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.71.0  # Get the latest from: https://github.com/antonbabenko/pre-commit-terraform/releases
+    hooks:
+      # todo: the following needs to be tested before enabling.
+      # - id: terraform_fmt
+      # - id: terraform_checkov
+      # - id: terraform_tfsec
+      # TODO: Turn back on when docs PR is merged
+      # - id: terraform_validate
+      - id: terraform_docs
+        args:
+          - '--args=--config=.terraform-docs.yml'
+      - id: terraform_tflint
+        args:
+          # Disabling unsused declarations so terraform modules remain consistent
+          - --args=--disable-rule=terraform_unused_declarations
+          # - --args=--enable-rule=terraform_documented_variables
+          # - --args=--enable-rule=terraform_documented_outputs
+          # - --args=--enable-rule=terraform_comment_syntax
+          # - --args=--enable-rule=terraform_naming_convention
+          # - --args=--enable-rule=terraform_required_version
+          # - --args=--enable-rule=terraform_typed_variables
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0
+    hooks:
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: check-added-large-files
+      - id: check-shebang-scripts-are-executable
+      - id: check-symlinks
+      - id: check-xml
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: requirements-txt-fixer
+      - id: trailing-whitespace

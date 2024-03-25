@@ -1,0 +1,9 @@
+# Root level repository Ownership
+*       @deltastreaminc/infra
+
+# Override Global ownership for local paths.
+
+# Example:
+# EKS Ownership
+# - uncomment below line
+# /aws/eks/ @deltastreaminc/<username|teamname>
