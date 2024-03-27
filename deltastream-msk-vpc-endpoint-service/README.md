@@ -1,48 +1,9 @@
 # deltastream-msk-vpc-endpoint-service
 
-[add descrition]
-
+Terraform module that configures a AWS Private Link endpoint for an existing Amazon MSK cluster for connecting to DeltaStream.
 
 ## Requisites
 * Install terraform >= 0.15
-
-## Setup: AWS Cli
-
-```
-export AWS_ACCESS_KEY_ID=<your access key>
-export AWS_SECRET_ACCESS_KEY=<your secret key>
-  - optionally, set export AWS_PROFILE=<profile-name>
-    - if you are using use AWS Profile from aws credentials file.
-```
-
-
-## Configure AWS Credentials
-* Set up AWS Config and Credentials
-```
-cat ~/.aws/config
-[default]
-region = us-west-2
-
-[prod]
-region = us-west-2
-```
-
-```
-cat ~/.aws/credentials
-[default]
-aws_access_key_id = <your non-prod access key>
-aws_secret_access_key = <your non-prod secret key>
-
-[dev]
-aws_access_key_id = <your prod access key>
-aws_secret_access_key = <your prod secret key>
-```
-
-* Switch between account credentials
-1. To switch to dev environment
-```
-export AWS_PROFILE=dev
-```
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -51,6 +12,13 @@ export AWS_PROFILE=dev
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.2.2 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | 5.25.0 |
+
+## Notes
+
+* This module only supports SASL IAM and SASL SCRAM authentication.
+* This module does not support MSK brokers with custom advertised listener endpoints.
+* AWS NLB and endpoint will be created in the same subnets as the MSK broker.
+* Security groups may need to be updated to allow traffic to the MSK broker from the NLB.
 
 ## Providers
 
@@ -90,7 +58,7 @@ No modules.
 | <a name="input_enable_sasl_iam_ports"></a> [enable\_sasl\_iam\_ports](#input\_enable\_sasl\_iam\_ports) | Expose IAM ports for the MSK cluster. | `bool` | `true` | no |
 | <a name="input_enable_sasl_scram_ports"></a> [enable\_sasl\_scram\_ports](#input\_enable\_sasl\_scram\_ports) | Expose SASL/SCRAM ports for the MSK cluster. | `bool` | `false` | no |
 | <a name="input_msk_cluster_name"></a> [msk\_cluster\_name](#input\_msk\_cluster\_name) | The name of the MSK Cluster.<br><br>  E.g. For an ARN arn:aws:kafka:us-west-2:123456789012:cluster/my-msk-123/ffab6be5-b41a-cc33-8e23-90098cbbde86-10,<br>  the cluster name is my-msk-123. | `string` | n/a | yes |
-| <a name="input_name_prefix"></a> [name\_prefix](#input\_name\_prefix) | Prefix to apply to the resources. | `string` | `"ds-"` | no |
+| <a name="input_name_prefix"></a> [name\_prefix](#input\_name\_prefix) | Prefix to apply to the resources. | `string` | `"ds"` | no |
 
 ## Outputs
 
@@ -98,5 +66,5 @@ No modules.
 |------|-------------|
 | <a name="output_msk_endpoint_service_id"></a> [msk\_endpoint\_service\_id](#output\_msk\_endpoint\_service\_id) | Return the aws\_vpc\_endpoint\_service: service id for the MSK endpoint service |
 | <a name="output_msk_endpoint_service_name"></a> [msk\_endpoint\_service\_name](#output\_msk\_endpoint\_service\_name) | Return the aws\_vpc\_endpoint\_service: service\_name for the MSK endpoint service |
-| <a name="output_table"></a> [table](#output\_table) | n/a |
+| <a name="output_table"></a> [table](#output\_table) | Return a table of broker host/port endpoint and currosponding Availability Zone ID and Private link port. |
 <!-- END_TF_DOCS -->

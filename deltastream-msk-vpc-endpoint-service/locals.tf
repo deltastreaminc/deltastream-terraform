@@ -5,7 +5,7 @@
 locals {
 
   create = var.create
-  name_prefix = format("%-%s", local.name_prefix, lower(random_string.resource-id[0].result))
+  name_prefix = format("%s-%s", var.name_prefix, lower(random_string.resource-id[0].result))
 
   msk = {
     cluster_name = var.msk_cluster_name
@@ -32,8 +32,8 @@ locals {
     name = format("%s-%s", local.name_prefix, "vpces")
   }
 
-  sasl_iam_host_port_map = var.enable_sasl_iam_ports ? { for k in split(",", data.aws_msk_cluster.msk-cluster.bootstrap_brokers_sasl_iam) : split(":", k)[0] => tonumber(split(":", k)[1]) } : {}
-  sasl_scram_host_port_map = var.enable_sasl_scram_ports ? { for k in split(",", data.aws_msk_cluster.msk-cluster.bootstrap_brokers_sasl_scram) : split(":", k)[0] => tonumber(split(":", k)[1]) } : {}
+  sasl_iam_host_port_map = var.enable_sasl_iam_ports ? { for k in split(",", data.aws_msk_cluster.msk-cluster[0].bootstrap_brokers_sasl_iam) : split(":", k)[0] => tonumber(split(":", k)[1]) } : {}
+  sasl_scram_host_port_map = var.enable_sasl_scram_ports ? { for k in split(",", data.aws_msk_cluster.msk-cluster[0].bootstrap_brokers_sasl_scram) : split(":", k)[0] => tonumber(split(":", k)[1]) } : {}
 
   sasl_iam_table = var.enable_sasl_iam_ports ? [
     for idx, b in data.aws_msk_broker_nodes.msk-broker-nodes[0].node_info_list : {
@@ -55,8 +55,6 @@ locals {
 
   tags = merge({
     MskClusterName = var.msk_cluster_name
-    EnableSaslScramPorts = var.enable_sasl_scram_ports
-    EnableSaslIamPorts = var.enable_sasl_iam_ports
   }, var.additional_tags)
 
 }

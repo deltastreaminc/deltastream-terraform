@@ -1,8 +1,9 @@
 # examples/msk-vpc-endpoint-service
-[add description]
+
+Example usage of the deltastream-msk-vpc-endpoint-service module.
 
 # Usage: how to run
-- update vpces.tfvars
+- update vpces.tfvars with your configuration
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements

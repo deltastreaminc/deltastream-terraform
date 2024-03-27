@@ -5,7 +5,7 @@
 variable "name_prefix" {
   type = string
   description = "Prefix to apply to the resources."
-  default = "ds-"
+  default = "ds"
 }
 
 variable "msk_cluster_name" {
